@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
 import Note from "../Components/Journal/Note";
 import axios from "axios";
-import "../Styles/Journal.css"
+import "../Styles/Journal.css";
 
 const JournalPage = () => {
   const [isExpandedId, setIsExpandedId] = useState(null);
@@ -19,7 +19,7 @@ const JournalPage = () => {
     const fetchJournals = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8000/api/users/journals/${userId}`,
+          `${import.meta.env.VITE_API_URL}/api/users/journals/${userId}`,
           { withCredentials: true }
         );
         setJournals(sortJournalsByDate(res.data.journals, sortOrder));
@@ -49,7 +49,7 @@ const JournalPage = () => {
 
     try {
       const res = await axios.delete(
-        `http://localhost:8000/api/users/journals/delete/${id}`,
+        `${import.meta.env.VITE_API_URL}/api/users/journals/delete/${id}`,
         { withCredentials: true }
       );
       console.log(res);
@@ -68,7 +68,7 @@ const JournalPage = () => {
     if (newNote.title && newNote.content) {
       try {
         const res = await axios.post(
-          "http://localhost:8000/api/users/journals/add",
+          `${import.meta.env.VITE_API_URL}/api/users/journals/add`,
           {
             ...newNote,
             userId,
@@ -92,9 +92,7 @@ const JournalPage = () => {
           <h1 className="text-5xl font-bold text-white mb-4">
             Personal Journal
           </h1>
-          <p className="text-white">
-            Capture your thoughts and memories
-          </p>
+          <p className="text-white">Capture your thoughts and memories</p>
         </div>
 
         {/* New Entry Section */}
@@ -142,9 +140,7 @@ const JournalPage = () => {
 
         {/* Entries Section */}
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-semibold text-white">
-            Your Entries
-          </h2>
+          <h2 className="text-2xl font-semibold text-white">Your Entries</h2>
           <button
             onClick={toggleSortOrder}
             className="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-black rounded-xl shadow-md hover:shadow-lg transition-all duration-300"

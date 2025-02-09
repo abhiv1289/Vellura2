@@ -44,7 +44,7 @@ function Register() {
     const fetchData = async () => {
       try {
         const res = await axios.post(
-          "http://localhost:8000/api/auth/register",
+          `${import.meta.env.VITE_API_URL}/api/auth/register`,
           {
             username: username,
             name: fullName,

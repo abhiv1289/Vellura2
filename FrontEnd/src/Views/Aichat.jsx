@@ -7,14 +7,14 @@ import ReactMarkdown from "react-markdown";
 function Aichat() {
   const [chatHistory, setChatHistory] = useState([]);
   const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState("");
   const [generatingAnswer, setGeneratingAnswer] = useState(false);
   const [userSubmitted, setUserSubmitted] = useState(false);
   const chatContainerRef = useRef(null);
 
   useEffect(() => {
     if (chatContainerRef.current && userSubmitted) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
       setUserSubmitted(false);
     }
   }, [chatHistory]);
@@ -28,31 +28,47 @@ function Aichat() {
     const currentQuestion = question;
     setQuestion("");
 
+    // Add user question to chat history
     setChatHistory((prev) => [
       ...prev,
       { type: "question", content: currentQuestion },
     ]);
 
     try {
-      const response = await axios({
-        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${
-          import.meta.env.VITE_API_GENERATIVE_LANGUAGE_CLIENT
-        }`,
-        method: "post",
-        data: {
-          contents: [{ parts: [{ text: currentQuestion }] }],
+      const response = await axios.post(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent`,
+        {
+          contents: [
+            {
+              parts: [{ text: currentQuestion }],
+            },
+          ],
         },
-      });
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "X-goog-api-key": import.meta.env.VITE_GEMINI_API_KEY, // ✅ Env var
+          },
+        }
+      );
 
-      const aiResponse = response.data.candidates[0].content.parts[0].text;
+      const aiResponse =
+        response.data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+        "No response";
+
       setChatHistory((prev) => [
         ...prev,
         { type: "answer", content: aiResponse },
       ]);
-      setAnswer(aiResponse);
     } catch (error) {
-      console.log(error);
-      setAnswer("Sorry - Something went wrong. Please try again!");
+      console.error(error);
+      setChatHistory((prev) => [
+        ...prev,
+        {
+          type: "answer",
+          content: "Sorry - Something went wrong. Please try again!",
+        },
+      ]);
     }
 
     setGeneratingAnswer(false);
@@ -80,7 +96,8 @@ function Aichat() {
                   Chat with Sera!
                 </h2>
                 <p className="text-gray-600 mb-4">
-                  I&apos;m here to help you with anything you&apos;d like to know. You can ask me about:
+                  I&apos;m here to help you with anything you&apos;d like to
+                  know. You can ask me about:
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
                   <div className="bg-color p-4 rounded-lg shadow-sm">
@@ -90,7 +107,8 @@ function Aichat() {
                     <span className="text-blue-500">🤔</span> Active Listening
                   </div>
                   <div className="bg-color p-4 rounded-lg shadow-sm">
-                    <span className="text-blue-500">📝</span> Mindfulness Strategies
+                    <span className="text-blue-500">📝</span> Mindfulness
+                    Strategies
                   </div>
                   <div className="bg-color p-4 rounded-lg shadow-sm">
                     <span className="text-blue-500">🔧</span> 24/7 Availability
@@ -133,7 +151,10 @@ function Aichat() {
         </div>
 
         {/* Fixed Input Form */}
-        <form onSubmit={generateAnswer} className="bg-color rounded-lg shadow-lg p-4">
+        <form
+          onSubmit={generateAnswer}
+          className="bg-color rounded-lg shadow-lg p-4"
+        >
           <div className="flex flex-col sm:flex-row gap-2">
             <input
               required

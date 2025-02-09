@@ -8,7 +8,7 @@ const userFromLocalStorage = () => {
 
 const initialState = {
   User: userFromLocalStorage(),
-  isLoggedIn: userFromLocalStorage().length > 0, // Initialize isLoggedIn based on localStorage
+  isLoggedIn: userFromLocalStorage().length > 0,
 };
 
 export const UserSlice = createSlice({
@@ -21,7 +21,7 @@ export const UserSlice = createSlice({
         name: action.payload.name,
         email: action.payload.email,
         userType: action.payload.userType,
-        exp: action.payload.exp
+        exp: action.payload.exp,
       };
       state.User = user;
       state.isLoggedIn = true; // Set isLoggedIn to true when a user logs in

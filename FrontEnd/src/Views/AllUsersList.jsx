@@ -19,9 +19,12 @@ function AllUsersList() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/api/users", {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/users`,
+          {
+            withCredentials: true,
+          }
+        );
         setUsers(res.data.data || []);
         console.log(res.data.data);
       } catch (err) {
@@ -35,7 +38,7 @@ function AllUsersList() {
     const fetchFriendRequests = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8000/api/friends/pending/${userId}`,
+          `${import.meta.env.VITE_API_URL}/api/friends/pending/${userId}`,
           { withCredentials: true }
         );
         setFriendRequests(res.data.pendingRequests || []);
@@ -54,7 +57,7 @@ function AllUsersList() {
   const sendFriendRequest = async (receiverId) => {
     try {
       const res = await axios.post(
-        "http://localhost:8000/api/friends/sendrequest",
+        `${import.meta.env.VITE_API_URL}/api/friends/sendrequest`,
         { sender: userId, receiver: receiverId },
         { withCredentials: true }
       );
@@ -67,7 +70,9 @@ function AllUsersList() {
   const acceptFriendRequest = async (requestId) => {
     try {
       const res = await axios.patch(
-        `http://localhost:8000/api/friends/acceptrequest/${requestId}`,
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/friends/acceptrequest/${requestId}`,
         {},
         { withCredentials: true }
       );
@@ -81,7 +86,9 @@ function AllUsersList() {
   const declineFriendRequest = async (requestId) => {
     try {
       const res = await axios.delete(
-        `http://localhost:8000/api/friends/rejectrequest/${requestId}`,
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/friends/rejectrequest/${requestId}`,
         { withCredentials: true }
       );
       alert(res.data.message);

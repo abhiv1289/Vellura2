@@ -28,9 +28,12 @@ function OtpVerification({ isOtpSubmitted, setIsOtpSubmitted, email }) {
 
   const handleResendOtp = async () => {
     try {
-      const res = await axios.post("http://localhost:8000/api/auth/resendotp", {
-        email: email,
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/auth/resendotp`,
+        {
+          email: email,
+        }
+      );
 
       notifySuccess("OTP Resent Successfully!");
     } catch (error) {
@@ -49,7 +52,7 @@ function OtpVerification({ isOtpSubmitted, setIsOtpSubmitted, email }) {
     const fetchData = async () => {
       try {
         const res = await axios.post(
-          "http://localhost:8000/api/auth/verifyotp",
+          `${import.meta.env.VITE_API_URL}/api/auth/verifyotp`,
           { email: email, otp: otp }
         );
 

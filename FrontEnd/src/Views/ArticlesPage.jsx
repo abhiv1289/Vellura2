@@ -33,9 +33,12 @@ function ArticlesPage() {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/articles", {
-          withCredentials: true,
-        });
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/articles`,
+          {
+            withCredentials: true,
+          }
+        );
         const fetchedArticles = response.data.data.map((article) => ({
           ...article,
           likedByCurrentUser: article.likedByCurrentUser || false,
@@ -61,7 +64,7 @@ function ArticlesPage() {
   const handleLike = async (articleId) => {
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/articles/like/${articleId}`,
+        `${import.meta.env.VITE_API_URL}/api/articles/like/${articleId}`,
         {},
         { withCredentials: true }
       );
@@ -91,7 +94,7 @@ function ArticlesPage() {
       data.append("image", image);
       try {
         const uploadRes = await axios.post(
-          "http://localhost:8000/api/upload",
+          `${import.meta.env.VITE_API_URL}/api/upload`,
           data,
           {
             headers: { "Content-Type": "multipart/form-data" },
@@ -110,7 +113,7 @@ function ArticlesPage() {
       };
 
       await axios.post(
-        "http://localhost:8000/api/articles/create",
+        `${import.meta.env.VITE_API_URL}/api/articles/create`,
         newArticleData,
         { withCredentials: true }
       );
@@ -147,14 +150,7 @@ function ArticlesPage() {
   return (
     <>
       {/* <ParallaxShowcase /> */}
-      {/* <img
-    <div>
-      <ParallaxShowcase />
-      <img
-        src={bg}
-        alt="Background"
-        className="absolute inset-0 w-full h-full object-cover -z-10"
-      /> */}
+
       <h1 className="text-5xl font-bold text-center py-4 mt-5">Articles</h1>
 
       {/* Search & Filter Section */}

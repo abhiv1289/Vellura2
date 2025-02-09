@@ -78,16 +78,6 @@ const Homepage = () => {
 
   return (
     <div className="relative flex flex-col min-h-screen pr-10">
-      {/* Background image rendered with an img tag */}
-      <div className=" w-full h-full ">
-        {/* <img
-          src={bg}
-          alt="Background"
-          className="absolute  w-full h-full  rounded-2xl"
-          loading="lazy"
-        /> */}
-      </div>
-
       <div className="relative z-10  bg-opacity-80 min-h-screen">
         {/* Show MoodComponent only if user has NOT submitted */}
         {showMoodComponent && (

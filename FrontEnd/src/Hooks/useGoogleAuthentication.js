@@ -1,12 +1,12 @@
 import { useDispatch } from "react-redux";
 import { useCallback } from "react";
 import { addUser } from "../Features/User/UserSlice";
-import {UseAuthContext} from '../Context/AuthContext.jsx';
+import { UseAuthContext } from "../Context/AuthContext.jsx";
 
 const useGoogleAuth = () => {
-  const {setAuth} = UseAuthContext();
+  const { setAuth } = UseAuthContext();
   const dispatch = useDispatch();
-  const googleAuthUrl = "http://localhost:8000/api/auth/google"; // Ensure this matches your backend URL
+  const googleAuthUrl = `${import.meta.env.VITE_API_URL}/api/auth/google`; // Ensure this matches your backend URL
 
   const authenticate = useCallback(() => {
     // Open the popup for Google login
@@ -15,7 +15,7 @@ const useGoogleAuth = () => {
     // Listen for the message from the popup window once it's completed
     const handleMessage = (event) => {
       // Ensure the message is coming from the expected origin
-      if (event.origin !== "http://localhost:8000") return; // Update this if your frontend and backend are on different ports
+      if (event.origin !== `${import.meta.env.VITE_API_URL}`) return; // Update this if your frontend and backend are on different ports
 
       // Handle Google login result
       if (event.data.error) {
@@ -32,7 +32,6 @@ const useGoogleAuth = () => {
         };
         dispatch(addUser(newUser));
         setAuth(newUser);
-
 
         // Redirect to home or dashboard page
         window.location.href = "/login"; // Adjust URL to match your frontend route

@@ -46,7 +46,7 @@ function Login() {
     const fetchData = async () => {
       try {
         const res = await axios.post(
-          "http://localhost:8000/api/auth/login",
+          `${import.meta.env.VITE_API_URL}/api/auth/login`,
           { username, email, password },
           { withCredentials: true }
         );
@@ -56,7 +56,7 @@ function Login() {
           name: res.data.name,
           email: res.data.email,
           userType: res.data.userType,
-          exp: res.data.exp
+          exp: res.data.exp,
         };
         notifySuccess(res.data.message);
         setTimeout(() => {
@@ -115,9 +115,7 @@ function Login() {
                 />
               </div>
               <div>
-                <h1 className="text-black text-center rounded-full mt-2">
-                  OR
-                </h1>
+                <h1 className="text-black text-center rounded-full mt-2">OR</h1>
               </div>
               <div>
                 <label className="block text-black font-medium rounded-md">

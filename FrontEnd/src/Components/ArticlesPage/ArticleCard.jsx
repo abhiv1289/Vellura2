@@ -16,7 +16,7 @@ const ArticleCard = ({ article, handleLike }) => {
   const handleLikeClick = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/articles/like/${article._id}`,
+        `${import.meta.env.VITE_API_URL}/api/articles/like/${article._id}`,
         {},
         { withCredentials: true }
       );

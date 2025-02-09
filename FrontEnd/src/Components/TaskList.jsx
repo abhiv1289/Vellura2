@@ -9,7 +9,7 @@ const TaskList = () => {
   const [error, setError] = useState(null);
   const [newTask, setNewTask] = useState({ title: "", description: "" });
   const [adding, setAdding] = useState(false);
-  
+
   // Fetch all tasks when the component mounts.
   useEffect(() => {
     fetchTasks();
@@ -19,9 +19,12 @@ const TaskList = () => {
   const fetchTasks = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/api/tasks/getall", {
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/tasks/getall`,
+        {
+          withCredentials: true,
+        }
+      );
       setTasks(response.data);
       console.log("Fetched tasks:", response.data);
     } catch (err) {
@@ -37,7 +40,7 @@ const TaskList = () => {
     console.log(`Completing task: ${id}`);
     try {
       await axios.put(
-        `http://localhost:8000/api/tasks/${id}`,
+        `${import.meta.env.VITE_API_URL}/api/tasks/${id}`,
         { status: "completed" },
         { withCredentials: true }
       );
@@ -65,7 +68,7 @@ const TaskList = () => {
   const deleteTask = async (id) => {
     console.log(`Deleting task: ${id}`);
     try {
-      await axios.delete(`http://localhost:8000/api/tasks/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/tasks/${id}`, {
         withCredentials: true,
       });
       // Update the tasks state by filtering out the deleted task.
@@ -83,7 +86,7 @@ const TaskList = () => {
     try {
       // POST request to add a new task.
       const response = await axios.post(
-        "http://localhost:8000/api/tasks/create",
+        `${import.meta.env.VITE_API_URL}/api/tasks/create`,
         newTask,
         { withCredentials: true }
       );
@@ -100,7 +103,8 @@ const TaskList = () => {
   };
 
   // Show loading or error message.
-  if (loading) return <p className="text-center text-gray-600">Loading tasks...</p>;
+  if (loading)
+    return <p className="text-center text-gray-600">Loading tasks...</p>;
   if (error) return <p className="text-center text-black">{error}</p>;
 
   return (

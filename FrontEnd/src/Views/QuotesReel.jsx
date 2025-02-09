@@ -9,9 +9,12 @@ const QuoteReel = () => {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/articles", {
-          withCredentials: true,
-        });
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/articles`,
+          {
+            withCredentials: true,
+          }
+        );
         console.log(response.data.data); // Log the response
 
         const fetchedArticles = response.data.data.slice(0, 3); // ✅ Ensure it's an array

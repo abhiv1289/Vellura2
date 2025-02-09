@@ -28,7 +28,7 @@ const MoodComponent = ({ onMoodSubmit }) => {
 
     try {
       await axios.post(
-        "http://localhost:8000/api/mood/set",
+        `${import.meta.env.VITE_API_URL}/api/mood/set`,
         { mood: selectedMood },
 
         { withCredentials: true }

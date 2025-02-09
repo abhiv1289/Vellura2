@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UseAuthContext } from "../Context/AuthContext";
-import "../Styles/FriendsList.css"
+import "../Styles/FriendsList.css";
 
 import Loader from "../Components/Loader";
 
@@ -19,9 +19,12 @@ const FriendsList = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await fetch(`http://localhost:8000/api/friends/${userId}`, {
-          credentials: "include",
-        });
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/friends/${userId}`,
+          {
+            credentials: "include",
+          }
+        );
         const data = await res.json();
         setUsers(data.friends || []);
       } catch (err) {
@@ -38,12 +41,15 @@ const FriendsList = () => {
 
   const removeFriend = async (friendId) => {
     try {
-      const res = await fetch("http://localhost:8000/api/friends/remove", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ userId, friendId }),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/friends/remove`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ userId, friendId }),
+        }
+      );
       const data = await res.json();
       alert(data.message);
       setUsers((prevUsers) =>

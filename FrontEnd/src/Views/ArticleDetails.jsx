@@ -24,7 +24,7 @@ const ArticleDetails = () => {
     const fetchArticle = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/articles/${id}`,
+          `${import.meta.env.VITE_API_URL}/api/articles/${id}`,
           { withCredentials: true }
         );
 
@@ -44,9 +44,12 @@ const ArticleDetails = () => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:8000/api/articles/delete/${id}`, {
-        withCredentials: true,
-      });
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/articles/delete/${id}`,
+        {
+          withCredentials: true,
+        }
+      );
       navigate(-1);
     } catch (error) {
       console.error("Error deleting article:", error);
@@ -58,7 +61,7 @@ const ArticleDetails = () => {
     try {
       const updatedInfo = { id, title: updatedTitle, content: updatedContent };
       await axios.put(
-        `http://localhost:8000/api/articles/update/${id}`,
+        `${import.meta.env.VITE_API_URL}/api/articles/update/${id}`,
         updatedInfo,
         { withCredentials: true }
       );

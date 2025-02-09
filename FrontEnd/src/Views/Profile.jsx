@@ -33,7 +33,7 @@ const Profile = () => {
     const fetchUser = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8000/api/users/${userData.id}`,
+          `${import.meta.env.VITE_API_URL}/api/users/${userData.id}`,
           {
             withCredentials: true,
           }
@@ -44,7 +44,7 @@ const Profile = () => {
           name: res.data.data.name,
           email: res.data.data.email,
           userType: res.data.data.userType,
-          exp: action.payload.exp
+          exp: action.payload.exp,
         };
 
         dispatch(addUser(newUser));
@@ -71,7 +71,7 @@ const Profile = () => {
       };
 
       const res = await axios.post(
-        `http://localhost:8000/api/users/edit`,
+        `${import.meta.env.VITE_API_URL}/api/users/edit`,
         updatedInfo,
         { withCredentials: true }
       );
@@ -93,9 +93,12 @@ const Profile = () => {
     }
 
     try {
-      const res = await axios.delete(`http://localhost:8000/api/users/delete`, {
-        withCredentials: true,
-      });
+      const res = await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/users/delete`,
+        {
+          withCredentials: true,
+        }
+      );
 
       console.log("Profile deleted successfully:", res.data);
       setAuth(null);

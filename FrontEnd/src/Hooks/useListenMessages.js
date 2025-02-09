@@ -1,9 +1,8 @@
-import { useEffect} from 'react';
-import { UseSocketContext } from '../context/SocketContext';
+import { useEffect } from "react";
+import { UseSocketContext } from "../context/SocketContext";
 
-const useListenMessages = ({messages, setMessages}) => {
+const useListenMessages = ({ messages, setMessages }) => {
   const { socket } = UseSocketContext();
-  // const [messages, setMessages] = useState([]);
 
   useEffect(() => {
     const handleNewMessage = (newMessage) => {
@@ -11,7 +10,7 @@ const useListenMessages = ({messages, setMessages}) => {
       setMessages((prevMessages) => [...prevMessages, newMessage]);
     };
 
-    socket?.on('newMessage', handleNewMessage);
+    socket?.on("newMessage", handleNewMessage);
 
     return () => socket?.off("newMessage", handleNewMessage);
   }, [socket]);
