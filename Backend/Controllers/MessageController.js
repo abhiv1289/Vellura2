@@ -1,15 +1,15 @@
 import mongoose from "mongoose";
 import Conversation from "../Models/conversation.js";
 import Message from "../Models/message.js";
-import {io, getReceiverSocketId} from '../socket/socket.js';
+import { io, getReceiverSocketId } from "../socket/socket.js";
 
 export const sendMessage = async (req, res) => {
   try {
     const { message } = req.body;
     const { id: receiverid } = req.params;
     const senderid = req.user._id;
-    const msg=message;
-    
+    const msg = message;
+
     let conversation = await Conversation.findOne({
       participants: { $all: [senderid, receiverid] },
     });
@@ -23,7 +23,7 @@ export const sendMessage = async (req, res) => {
     const newmessage = new Message({
       senderid,
       receiverid,
-      message:msg,
+      message: msg,
     });
 
     if (newmessage) {
@@ -33,8 +33,7 @@ export const sendMessage = async (req, res) => {
     await Promise.all([conversation.save(), newmessage.save()]);
 
     const receiverSocketId = getReceiverSocketId(receiverid);
-    if(receiverSocketId){
-      // console.log("wroking");
+    if (receiverSocketId) {
       io.to(receiverSocketId).emit("newMessage", newmessage);
     }
 
@@ -50,7 +49,6 @@ export const sendMessage = async (req, res) => {
     });
   }
 };
-
 
 export const getMessage = async (req, res) => {
   try {

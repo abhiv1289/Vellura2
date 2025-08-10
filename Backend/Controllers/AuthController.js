@@ -3,6 +3,8 @@ import bcryptjs from "bcryptjs";
 import { generate } from "../Utils/WebToken.js";
 import { generateOTP, sendMail } from "../Utils/verification.js";
 import Task from "../Models/task.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 // for register
 export const register = async (req, res) => {
@@ -10,14 +12,19 @@ export const register = async (req, res) => {
     const { name, email, password, confirmPassword, dob, userType, username } =
       req.body;
 
-    let user = await User.findOne({ email });
-    if (user && user.isVerified) return res.status(400).json({message : "Email already registered!"});
+    const existingUser = await User.findOne({
+      $or: [{ email }, { username }],
+    });
 
-    user = await User.findOne({ username });
-    if (user && user.isVerified) return res.status(400).json({message : "username already exists"});
-
-    if(user)
-      return res.status(200).json({message : "Lead to verify otp"});
+    if (existingUser && existingUser.isVerified) {
+      return res.status(400).json({
+        message: "Email or username already registered!",
+      });
+    } else if (existingUser) {
+      return res.status(200).json({
+        message: "Lead to verify otp",
+      });
+    }
 
     if (password !== confirmPassword)
       return res.status(400).json({ error: "Passwords don't match" });
@@ -42,13 +49,9 @@ export const register = async (req, res) => {
     if (newUser) {
       await newUser.save();
 
-
-
       await sendMail(email, OTP);
 
-      const dailyTaskDescription = "Medidate for 5 mins";
-      const title='Daily Task'
-     await Task.create({ title,description: dailyTaskDescription, user: newUser._id, status: "pending" });
+      taskCreation(newUser);
 
       res.status(200).json({
         message: "User created successfully",
@@ -80,20 +83,15 @@ export const login = async (req, res) => {
 
     if (!user) return res.status(404).json({ message: "user not found" });
 
-    if(user && !user.isVerified)
-      return res.status(200).json({message : "Lead to verify otp"});
+    if (user && !user.isVerified)
+      return res.status(403).json({ message: "Lead to verify otp" });
 
     const passwordMatched = await bcryptjs.compare(
       password,
       user?.password || ""
     );
     if (!passwordMatched)
-      return res.status(400).json({ error: "Invalid password" });
-
-    if (!user.isVerified)
-      return res.status(400).json({
-        message: "Account not verified, verify OTP and then try logging in!",
-      });
+      return res.status(403).json({ error: "Invalid password" });
 
     generate(user._id, res);
 
@@ -102,9 +100,9 @@ export const login = async (req, res) => {
       username: user.name,
       email: user.email,
       userId: user._id,
-      userType : user.userType,
+      userType: user.userType,
       message: "Logged in successfully",
-      exp:user.exp
+      exp: user.exp,
     });
   } catch (error) {
     console.log(error.message);
@@ -126,5 +124,20 @@ export const logout = async (req, res) => {
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const taskCreation = async (newUser) => {
+  try {
+    const dailyTaskDescription = "Medidate for 5 mins";
+    const title = "Daily Task";
+    await Task.create({
+      title,
+      description: dailyTaskDescription,
+      user: newUser._id,
+      status: "pending",
+    });
+  } catch (error) {
+    console.log("Error creating tasks!", error);
   }
 };

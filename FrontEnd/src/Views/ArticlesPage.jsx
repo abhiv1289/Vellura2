@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import { UseAuthContext } from "../Context/AuthContext";
 
 import axios from "axios";
-import "../Styles/Articles.css"
+import "../Styles/Articles.css";
 import ArticleCard from "../Components/ArticlesPage/ArticleCard";
 import bg from "../Assets/articlebg.jpg";
-import Loader from '../Components/Loader.jsx';
+import Loader from "../Components/Loader.jsx";
 import ParallaxShowcase from "./ParallaxShowcase";
 import CategoryDropdown from "../Components/ArticlesPage/CategoryDropdown";
 
@@ -90,21 +90,25 @@ function ArticlesPage() {
       const data = new FormData();
       data.append("image", image);
       try {
-        const uploadRes = await axios.post("http://localhost:8000/api/upload", data, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        const uploadRes = await axios.post(
+          "http://localhost:8000/api/upload",
+          data,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
         uploadedImageUrl = uploadRes.data.imageUrl;
       } catch (error) {
         console.log("Error uploading image:", error.message);
       }
     }
-  
+
     try {
       const newArticleData = {
         ...newArticle,
         image: uploadedImageUrl,
       };
-  
+
       await axios.post(
         "http://localhost:8000/api/articles/create",
         newArticleData,
@@ -112,7 +116,7 @@ function ArticlesPage() {
       );
     } catch (error) {
       console.log("Error creating article:", error.message);
-    }finally{
+    } finally {
       setShowModal(false);
       setLoading(false);
     }
@@ -136,21 +140,22 @@ function ArticlesPage() {
     return matchesSearch && matchesCategory;
   });
 
-  if(loading){
-    return <Loader/>
+  if (loading) {
+    return <Loader />;
   }
 
   return (
     <>
       {/* <ParallaxShowcase /> */}
       {/* <img
+    <div>
+      <ParallaxShowcase />
+      <img
         src={bg}
         alt="Background"
         className="absolute inset-0 w-full h-full object-cover -z-10"
       /> */}
-      <h1 className="text-5xl font-bold text-center py-4 mt-5">
-        Articles
-      </h1>
+      <h1 className="text-5xl font-bold text-center py-4 mt-5">Articles</h1>
 
       {/* Search & Filter Section */}
       <div className="flex justify-center gap-4 my-4">

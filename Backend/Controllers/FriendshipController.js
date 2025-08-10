@@ -13,11 +13,9 @@ export const sendFriendRequest = async (req, res) => {
     const user2 = await User.findById(receiver);
 
     if (!user1 || !user2) {
-      return res
-        .status(404)
-        .json({
-          message: "Sender or receiver not found! Can't send friend request",
-        });
+      return res.status(404).json({
+        message: "Sender or receiver not found! Can't send friend request",
+      });
     }
 
     // Check if a friendship request already exists between these users
@@ -145,19 +143,6 @@ export const removeFriend = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
-// export const deleteAll = async(req, res) => {
-//     try {
-//         const userId = req.user._id;
-//         const deletedFriendships = await Friendship.deleteMany({
-//             $or: [{user1 : userId}, {user2 : userId}]
-//         });
-//         res.status(200).json({ message: "All assocaited friendships deleted successfully" });
-//     } catch (error) {
-//         console.log("error deleting associated friendships", error.message);
-//         res.status(500).json({ error: "Internal server error" });
-//     }
-// }
 
 /**
  * Retrieves the list of friends for a given user.

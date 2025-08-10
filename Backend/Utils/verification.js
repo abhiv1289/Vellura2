@@ -1,11 +1,12 @@
 import nodemailer from "nodemailer";
 import User from "../Models/User.js";
-
+import dotenv from "dotenv";
+dotenv.config();
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "diwakerryan12345@gmail.com",
-    pass: "eulovxvqvhrpmarh",
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
   },
 });
 
@@ -70,10 +71,10 @@ export const resendOTP = async (req, res) => {
 
 // for sending otp
 export const sendMail = async (email, OTP) => {
-  transporter.sendMail({
-    from: "diwakerryan12345@gmail.com",
+  return transporter.sendMail({
+    from: process.env.EMAIL_USER,
     to: email,
-    subject: "OTP Verification from -----------",
+    subject: "OTP Verification from Vellura",
     text: `Your OTP is : ${OTP}`,
   });
 };

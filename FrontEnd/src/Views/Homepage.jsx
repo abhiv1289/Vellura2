@@ -117,7 +117,7 @@ const Homepage = () => {
               {userData.name || "User"}
             </h2>
             <h3>
-              <ExpBar/>
+              <ExpBar />
             </h3>
           </div>
         </div>
@@ -137,7 +137,9 @@ const Homepage = () => {
           </span>
         </div>
         <div className="article-section">
-          <h1 className="text-white text-7xl mb-5 mt-5 text-center">Latest Articles</h1>
+          <h1 className="text-white text-7xl mb-5 mt-5 text-center">
+            Latest Articles
+          </h1>
           <QuoteReel />
         </div>
       </div>
